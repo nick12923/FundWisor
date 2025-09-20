@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundWisor - Connect & Innovate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #1D3557;
+            --accent-gold: #F4C542;
+            --light-gray: #F7F9FA;
+            --white-color: #FFFFFF;
+            --dark-text: #2D3748;
+            --font-family: 'Poppins', sans-serif;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-family); background-color: var(--light-gray); margin: 0; color: var(--dark-text); }
+        .container { width: 100%; max-width: 1200px; padding: 20px; margin: 0 auto; box-sizing: border-box; }
+        .view { display: none; }
+        .view.active { display: block; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .header { position: sticky; top: 0; z-index: 1000; background-color: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; }
+        .navbar-brand { font-size: 1.75rem; font-weight: 700; color: var(--primary-color); cursor: pointer; }
+        .nav-controls { display: flex; align-items: center; gap: 1rem; }
+        .btn { padding: 10px 25px; border: none; border-radius: 50px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary { background-color: var(--accent-gold); color: var(--primary-color); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(244, 197, 66, 0.3); }
+        .btn-secondary { background-color: var(--white-color); color: var(--primary-color); border: 1px solid #e0e5ec; }
+        .hero { text-align: center; padding: 100px 20px; background-color: var(--white-color); }
+        .hero h1 { font-size: 3.5rem; line-height: 1.2; margin: 0 0 1rem 0; }
+        .hero h1 span { color: var(--primary-color); }
+        .hero p { font-size: 1.2rem; max-width: 600px; margin: 1.5rem auto 2.5rem; }
+        .auth-container { background-color: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); max-width: 400px; margin: 80px auto; text-align: center; }
+        .auth-container h1 { color: var(--primary-color); margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; box-sizing: border-box; transition: border-color 0.2s; }
+        .form-control:focus { border-color: var(--primary-color); outline: none; }
+        .role-selector { display: flex; gap: 1rem; align-items: center; }
+        .role-selector label { display: flex; align-items: center; gap: 0.5rem; font-weight: 400; }
+        .auth-switch { margin-top: 1.5rem; }
+        .dashboard-header { margin-bottom: 2rem; }
+        .dashboard-header h2 { font-size: 2.5rem; text-align: left; }
+        .card { background-color: var(--white-color); padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); margin-bottom: 2rem; }
+        .idea-list { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+        .idea-card { border: 1px solid #e9ecef; border-radius: 12px; padding: 1.5rem; transition: all 0.2s ease-in-out; background-color: #fff; }
+        .idea-card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(29, 53, 87, 0.1); }
+        .idea-card h4 { color: var(--primary-color); margin-top: 0; }
+        .idea-card p { color: #555; }
+        .idea-card small { color: #777; font-weight: 500; }
+        a { color: var(--primary-color); text-decoration: none; font-weight: 500; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar container">
+            <div class="navbar-brand" id="navbar-brand">FundWisor</div>
+            <div class="nav-controls" id="nav-controls"></div>
+        </nav>
+    </header>
+
+    <main>
+        <div id="home-view" class="view">
+            <section class="hero">
+                <h1>Where Great Ideas Meet<br><span>Smart Capital.</span></h1>
+                <p>The premier platform connecting ambitious entrepreneurs with visionary investors.</p>
+                <button class="btn btn-primary" id="home-get-started-btn">Get Started</button>
+            </section>
+        </div>
+
+        <div class="container">
+            <div id="login-view" class="view">
+                <div class="auth-container">
+                    <h1>Login</h1>
+                    <form id="login-form">
+                        <div class="form-group"><label for="email">Email</label><input type="email" id="email" class="form-control" required></div>
+                        <div class="form-group"><label for="password">Password</label><input type="password" id="password" class="form-control" required></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                    </form>
+                    <p class="auth-switch">Don't have an account? <a href="#" id="show-register-link">Register here</a></p>
+                </div>
+            </div>
+
+            <div id="register-view" class="view">
+                <div class="auth-container">
+                    <h1>Create Account</h1>
+                    <form id="register-form">
+                        <div class="form-group"><label for="register-name">Full Name</label><input type="text" id="register-name" class="form-control" required></div>
+                        <div class="form-group"><label for="register-email">Email</label><input type="email" id="register-email" class="form-control" required></div>
+                        <div class="form-group"><label for="register-password">Password</label><input type="password" id="register-password" class="form-control" required></div>
+                        <div class="form-group">
+                            <label>I am an...</label>
+                            <div class="role-selector"><label><input type="checkbox" name="roles" value="entrepreneur"> Entrepreneur</label><label><input type="checkbox" name="roles" value="investor"> Investor</label></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+                    </form>
+                    <p class="auth-switch">Already have an account? <a href="#" id="show-login-link">Login here</a></p>
+                </div>
+            </div>
+
+            <div id="entrepreneur-dashboard-view" class="view">
+                <div class="dashboard-header"><h2 id="entrepreneur-welcome">My Dashboard</h2></div>
+                <div class="card">
+                    <h3>Submit a New Idea</h3>
+                    <form id="idea-submission-form">
+                        <div class="form-group"><label for="idea-title">Idea Title</label><input type="text" id="idea-title" class="form-control" required></div>
+                        <div class="form-group"><label for="idea-outline">Brief Outline</label><textarea id="idea-outline" class="form-control" rows="4" required></textarea></div>
+                        <button type="submit" class="btn btn-primary">Submit Idea</button>
+                        <small style="display: block; margin-top: 10px; color: #888;">Submission fee will be required.</small>
+                    </form>
+                </div>
+                <div class="card">
+                    <h3>My Submitted Ideas</h3>
+                    <div id="entrepreneur-idea-list" class="idea-list"></div>
+                </div>
+            </div>
+
+            <div id="investor-dashboard-view" class="view">
+                <div class="dashboard-header"><h2 id="investor-welcome">Browse Ideas</h2></div>
+                <div class="card">
+                    <div id="investor-idea-list" class="idea-list"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- API Configuration ---
+            const API_BASE_URL = 'http://localhost:3000/api';
+
+            // --- Global State ---
+            let state = {
+                token: localStorage.getItem('token') || null,
+                user: null,
+                currentRole: null,
+            };
+
+            // --- DOM Elements ---
+            const dom = {
+                views: document.querySelectorAll('.view'),
+                navControls: document.getElementById('nav-controls'),
+                brandLogo: document.getElementById('navbar-brand'),
+                loginForm: document.getElementById('login-form'),
+                registerForm: document.getElementById('register-form'),
+                ideaSubmissionForm: document.getElementById('idea-submission-form'),
+                homeGetStartedBtn: document.getElementById('home-get-started-btn'),
+                showRegisterLink: document.getElementById('show-register-link'),
+                showLoginLink: document.getElementById('show-login-link'),
+                entrepreneurIdeaList: document.getElementById('entrepreneur-idea-list'),
+                investorIdeaList: document.getElementById('investor-idea-list'),
+                entrepreneurWelcome: document.getElementById('entrepreneur-welcome'),
+                investorWelcome: document.getElementById('investor-welcome'),
+            };
+
+            // --- API Service Layer ---
+            const api = {
+                async register(name, email, password, roles) {
+                    const res = await fetch(`${API_BASE_URL}/auth/register`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name, email, password, roles }),
+                    });
+                    return res.json();
+                },
+                async login(email, password) {
+                    const res = await fetch(`${API_BASE_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, password }),
+                    });
+                    return res.json();
+                },
+                async getIdeas() {
+                    if (!state.token) return [];
+                    const res = await fetch(`${API_BASE_URL}/ideas`, {
+                        headers: { 'Authorization': `Bearer ${state.token}` }
+                    });
+                    return res.json();
+                },
+                async submitIdea(title, outline) {
+                    const res = await fetch(`${API_BASE_URL}/ideas`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${state.token}`
+                        },
+                        body: JSON.stringify({ title, outline }),
+                    });
+                    return res.json();
+                }
+            };
+
+            // --- UI Rendering Functions ---
+            function showView(viewId) {
+                dom.views.forEach(view => view.classList.remove('active'));
+                document.getElementById(viewId)?.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+
+            function updateNav() {
+                dom.navControls.innerHTML = '';
+                if (state.token && state.user) {
+                    if (state.user.roles.length > 1) {
+                        const switchBtn = document.createElement('button');
+                        switchBtn.className = 'btn btn-secondary';
+                        const nextRole = state.currentRole === 'entrepreneur' ? 'Investor' : 'Entrepreneur';
+                        switchBtn.innerText = `View as ${nextRole}`;
+                        switchBtn.onclick = handleRoleSwitch;
+                        dom.navControls.appendChild(switchBtn);
+                    }
+                    const logoutBtn = document.createElement('button');
+                    logoutBtn.className = 'btn btn-secondary';
+                    logoutBtn.innerText = 'Logout';
+                    logoutBtn.onclick = handleLogout;
+                    dom.navControls.appendChild(logoutBtn);
+                } else {
+                    const loginBtn = document.createElement('button');
+                    loginBtn.className = 'btn btn-primary';
+                    loginBtn.innerText = 'Login / Register';
+                    loginBtn.onclick = () => showView('login-view');
+                    dom.navControls.appendChild(loginBtn);
+                }
+            }
+
+            async function renderDashboard() {
+                if (!state.token) return;
+
+                const ideas = await api.getIdeas();
+
+                if (state.currentRole === 'entrepreneur') {
+                    dom.entrepreneurIdeaList.innerHTML = '';
+                    if (Array.isArray(ideas) && ideas.length > 0) {
+                        ideas.forEach(idea => appendIdeaCard(dom.entrepreneurIdeaList, idea, 'full'));
+                    } else {
+                        dom.entrepreneurIdeaList.innerHTML = '<p>You have not submitted any ideas yet.</p>';
+                    }
+                }
+
+                if (state.currentRole === 'investor') {
+                    dom.investorIdeaList.innerHTML = '';
+                    if (Array.isArray(ideas) && ideas.length > 0) {
+                        ideas.forEach(idea => appendIdeaCard(dom.investorIdeaList, idea, 'partial'));
+                    } else {
+                        dom.investorIdeaList.innerHTML = '<p>No ideas have been submitted to the platform yet.</p>';
+                    }
+                }
+            }
+
+            function appendIdeaCard(listElement, idea, type) {
+                const card = document.createElement('div');
+                card.className = 'idea-card';
+                const content = type === 'full'
+                    ? `<p>${idea.outline}</p><small>Status: <strong>${idea.status}</strong></small>`
+                    : `<p>${idea.outline}</p><small>Category: <strong>${idea.category}</strong></small>`;
+
+                card.innerHTML = `<h4>${idea.title}</h4>${content}`;
+                listElement.appendChild(card);
+            }
+
+            // --- Event Handlers ---
+            async function handleLogin(e) {
+                e.preventDefault();
+                const email = dom.loginForm.email.value;
+                const password = dom.loginForm.password.value;
+                const data = await api.login(email, password);
+
+                if (data.token) {
+                    state.token = data.token;
+                    localStorage.setItem('token', data.token);
+                    initializeUserSession();
+                } else {
+                    alert(`Login Failed: ${data.message}`);
+                }
+            }
+
+            async function handleRegister(e) {
+                e.preventDefault();
+                const name = dom.registerForm['register-name'].value;
+                const email = dom.registerForm['register-email'].value;
+                const password = dom.registerForm['register-password'].value;
+                const roles = Array.from(dom.registerForm.querySelectorAll('input[name="roles"]:checked')).map(el => el.value);
+
+                if (roles.length === 0) return alert('Please select at least one role.');
+
+                const data = await api.register(name, email, password, roles);
+                if (data.message === 'User registered successfully!') {
+                    alert(data.message + ' Please log in.');
+                    dom.registerForm.reset();
+                    showView('login-view');
+                } else {
+                    alert(`Registration Failed: ${data.message}`);
+                }
+            }
+
+            async function handleIdeaSubmit(e) {
+                e.preventDefault();
+                const title = dom.ideaSubmissionForm['idea-title'].value;
+                const outline = dom.ideaSubmissionForm['idea-outline'].value;
+
+                const result = await api.submitIdea(title, outline);
+                if (result._id) {
+                    alert('Idea submitted successfully!');
+                    dom.ideaSubmissionForm.reset();
+                    renderDashboard();
+                } else {
+                    alert(`Submission failed: ${result.message}`);
+                }
+            }
+
+            function handleLogout() {
+                state.token = null;
+                state.user = null;
+                state.currentRole = null;
+                localStorage.removeItem('token');
+                dom.loginForm.reset();
+                showView('home-view');
+                updateNav();
+            }
+
+            function handleRoleSwitch() {
+                state.currentRole = state.currentRole === 'entrepreneur' ? 'investor' : 'entrepreneur';
+                showView(`${state.currentRole}-dashboard-view`);
+                renderDashboard();
+                updateNav();
+            }
+
+            function initializeUserSession() {
+                if (state.token) {
+                    const payload = JSON.parse(atob(state.token.split('.')[1]));
+                    state.user = { roles: payload.roles, name: payload.name };
+                    state.currentRole = state.user.roles[0];
+                    
+                    dom.entrepreneurWelcome.innerText = `Welcome, ${state.user.name}!`;
+                    dom.investorWelcome.innerText = `Welcome, ${state.user.name}!`;
+                    
+                    showView(`${state.currentRole}-dashboard-view`);
+                    renderDashboard();
+                } else {
+                    showView('home-view');
+                }
+                updateNav();
+            }
+
+            // --- Event Listeners ---
+            dom.loginForm.addEventListener('submit', handleLogin);
+            dom.registerForm.addEventListener('submit', handleRegister);
+            dom.ideaSubmissionForm.addEventListener('submit', handleIdeaSubmit);
+            dom.homeGetStartedBtn.addEventListener('click', () => showView('login-view'));
+            dom.showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); showView('register-view'); });
+            dom.showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showView('login-view'); });
+            dom.brandLogo.addEventListener('click', () => {
+                const view = state.token ? `${state.currentRole}-dashboard-view` : 'home-view';
+                showView(view);
+            });
+
+            // --- Initial Load ---
+            initializeUserSession();
+        });
+    </script>
+</body>
+</html>
