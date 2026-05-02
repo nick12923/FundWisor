@@ -58,7 +58,7 @@ CREATE INDEX idx_startups_sector ON startups(sector);
 CREATE INDEX idx_startups_created_at ON startups(created_at);
 ```
 
-## Startup Details Table (Protected Content)
+## Startup Details Table
 ```sql
 CREATE TABLE startup_details (
   id SERIAL PRIMARY KEY,
